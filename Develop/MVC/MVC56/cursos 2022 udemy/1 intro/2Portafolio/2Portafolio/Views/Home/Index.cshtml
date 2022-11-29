@@ -1,0 +1,34 @@
+﻿@model HomeIndexVM
+
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+    <!--la utilidad de las vistas parciales es fragmentar vistas muy extensas y hacerlas mas manejables. por convencion se utiliza el guion bajo.
+        si se desea compartir con varias vistas, debe ir colocado en shared, de lo contraio en la carpeta de ambito.
+    -->
+
+
+
+    <partial name="_ViewPresentacion" />
+
+    <partial name="_ViewPortafolio" />
+
+    <!--
+        se pasa el segundo argumento para que en la vista parcial se pueda volver al propio model el ienumerable, sin tener que pasar por el vm, y asi
+        poder seguir utilizando la estructura tipada. otra ventaja es que aunque jobs fuera nulo no habria error en la aplicacion
+    -->
+    <partial name="_ViewJobs" model="Model.Jobs" />
+}
+
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>

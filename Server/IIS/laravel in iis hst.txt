@@ -1,0 +1,8 @@
+https://www.youtube.com/watch?v=1p985k-sGoc
+
+-descargar el php manager para iis
+	-si no esta habilitado restrar nueva version de php, habilitar desde caracteristica de
+	windows en iis, el CGI
+-configurar extensiones
+-conf. handler mapping
+-crear proyecto laravel con composer

@@ -1,0 +1,39 @@
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\bin\Debug\ExamMapas.exe
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\bin\Debug\ExamMapas.pdb
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\bin\Debug\ExamMapas.xml
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ExamMapas.Form1.resources
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ExamMapas.Resources.resources
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ExamMapas.exe
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ExamMapas.xml
+C:\Documents and Settings\Administrador\Configuración local\Datos de programa\Temporary Projects\ExamMapas\obj\x86\Debug\ExamMapas.pdb
+C:\Documents and Settings\Administrador\Escritorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.exe
+C:\Documents and Settings\Administrador\Escritorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.xml
+C:\Documents and Settings\Administrador\Escritorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.pdb
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.exe
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.xml
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.pdb
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\bin\Debug\ExamMapas.exe
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\bin\Debug\ExamMapas.pdb
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\bin\Debug\ExamMapas.xml
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.Form1.resources
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.Resources.resources
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\SEDESO\Desktop\ExamMapas\ExamMapas\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Documents and Settings\Administrador\Escritorio\proyectos\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.exe
+C:\Documents and Settings\Administrador\Escritorio\proyectos\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.xml
+C:\Documents and Settings\Administrador\Escritorio\proyectos\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.pdb
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\bin\Debug\ExamMapas.exe
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\bin\Debug\ExamMapas.pdb
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\bin\Debug\ExamMapas.xml
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.vbprojAssemblyReference.cache
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.Form1.resources
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.Resources.resources
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.vbproj.GenerateResource.cache
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.vbproj.CoreCompileInputs.cache
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.exe
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.xml
+C:\Users\adan\Desktop\Repositorio\ExamMapas\ExamMapas\obj\x86\Debug\ExamMapas.pdb

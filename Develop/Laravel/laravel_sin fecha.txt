@@ -1,0 +1,909 @@
+ENTORNO
+*************************************************************************************
+*************************************************************************************
+
+1 instalar xampp
+2 instalar composer
+3 los arhivos de configuracion
+	modificar vhost C:\xampp\apache\conf\extra
+	<VirtualHost laravel.local:80>
+	    ServerAdmin laravel.local
+	    DocumentRoot "C:\xampp\htdocs\laravel\public"
+	    <Directory "C:\xampp\htdocs\laravel">
+		Options Indexes FollowSymLinks
+		AllowOverride All
+		Require all granted
+	    </Directory>
+	</VirtualHost>
+
+	modificar como adminsitrador el host de C:\Windows\System32\drivers\etc
+	127.0.0.1 laravel.local
+
+5 crear el proyecto laravel desde c:\xampp\htdocs con el comando:
+	composer create-project laravel/laravel laravel "5.5.*"
+
+	**LARAGON**
+	composer create-project --prefer-dist laravel/laravel proyecto
+	
+	(*) 5.5.* es la version que se trabaja con el curso, aunque existe la 5.7.*
+
+	si falla primero se ejecuta el comando:
+	composer config --global repo.packagist composer https://packagist.org
+	lo mismo para laragon
+
+6 en http://laravel.local se debe visualizar el proyecto inicial
+	en laragon tambien se puede visualizar con la ruta http://localhost/MySitio/public/	
+
+
+7 auth y bootstrap. a partir de laravel 6 ya no se instala por default, hay que correr los 
+	siguientes comandos:
+
+	composer require laravel/ui
+	php artisan ui vue --auth
+	php artisan ui:auth
+
+	php artisan ui bootstrap
+	php artisan ui bootstrap --auth
+	npm install
+	npm run dev
+	
+	
+
+BASE DE DATOS
+******************************************************************************************
+******************************************************************************************
+
+1 en mysql crear el usuario y base de datos homestead, el usuario con el password 'secret'
+
+-----se corren los comandos desde c:\xampp\htdocs\laravel:-------------------------------
+	para una configuracion como laragon, en el archivo .env se modifica:
+	
+	DB_CONNECTION=mysql
+	DB_HOST=127.0.0.1
+	DB_PORT=3306
+	DB_DATABASE=MySitio
+	DB_USERNAME=root
+	DB_PASSWORD=
+	
+2 se crean archivos de migracion con la nomenclatura recomendada:
+
+	php artisan make:migration create_estimations_table --create="estimations"
+	
+3 una vez modificados manualmente para que contengan los campos deseados, se corre el comando
+	
+	php artisan migrate
+	(*) se deben modificar algunos campos que causan error por no tener longitud
+
+	ejemplo de creacion de campos:
+	$table->increments('id');
+        $table->integer('folio');
+        $table->string('numcontrato'
+        $table->decimal('alcliquido',10,2)->nullable();
+        $table->text('observaciones')->nullable();
+        $table->dateTime('fecregistro')->nullable();
+        $table->tinyInteger('flag')->nullable(
+
+	
+en este punto ya se cuenta con el entorno y la base de datos con sus tablas listas para operar datos.
+a partir de ahora, se crearan rutas, controladores y modelos para realizar dicha operacion. 
+
+	php artisan make:model Estimation -mc --resource
+	modelo, migracion, controlador y recursos
+
+regenera la base de datos eliminando todo
+	
+	php artisan migrate:fresh
+
+
+
+PETICIONES
+******************************************************************************************
+******************************************************************************************
+POST SE UTILIZA ESTA PETICION PARA ACCIONES QUE IMPLIQUEN MODIFICACIONES POR EJEMPLO EN LA 
+	BASE DE DATOS. PUT Y DELETE EN EL FONDO SON POST
+
+
+GET SE UTILIZA ESTA PARA ACCIONES DE CONSULTA DE DATOS
+
+
+
+RAW SQL QUERY Y ELOQUENT
+***************************************************************************************************
+***************************************************************************************************
+
+raw sql puede ser practico para cuando se requiere ejecutar codigo sql de manera casi directa, independiente de vistas, 
+modelos y controladores.
+
+DB::SELECT();
+
+	ESTANDO EN EL PROPIO CONTROLADOR. REQUIERE use Illuminate\Support\Facades\DB;
+
+	$users=DB::select('select users.id,users.name,roles.name,roles.description
+        from users inner join 
+        role_user on users.id=role_user.user_id inner join roles 
+        on role_user.role_id=roles.id');
+
+        return view('users.index',compact('users'));
+
+DB::INSERT();
+DB::UPDATE();
+DB::DELETE("delete from xxx where campo=?",[1]);
+
+
+en un entorno de produccion lo mas aceptable es utilizar un ORM como eloquent, ya que facilita la manipulacion de la base 
+de datos por medio de objetos mapeados, algo similar a MS EntityFramework.
+
+
+1 el paso siguiente en el proceso de creacion del sitio seria la creacion de los modelos que nos permitan manejar
+los datos
+
+	php artisan make:model Estimation
+	php artisan make:model Estimation -mc --resource
+	
+	el segundo el el modelo junto con la migracion, el controlador y sus recursos
+	
+	
+	(*) siguiendo la convencion del nombre del modelo que tiene que ser la inicial mayusculas y en singular de la
+	tabla de la base de datos. si por alguna razon no se quiere manejar asi, la primera linea de codigo del modelo
+	debe especificar el nombre real de la tabla con: protected $table="nombrereal"
+
+2 el modelo ya tiene metodos predefinidos, ver la referencia del lenguaje en www.laravel.docs...
+	SELECT $variable=Modelo::all();
+		la variable ya tiene la coleccion de la tabla relacionada, luego se podra manipular desde la vista
+		por ejemplo
+		foreach($variable as $var){
+			echo $var->NombreCampo;
+		
+		$variable=Modelo::where("campo","criterio")->orderBy("campo")->get();
+
+	INSERT $variable=new Modelo;
+		$variable->campo="valor";
+		&variable->save();
+		
+		--------------------------------------------------------------------------------------------
+		CREATE. metodo apropiado para trabajo con vistas, tambien ocupa el modelo estatico
+		Modelo::create(["campo"=>"valor","campo"=>"valor"...]);
+		
+		requiere habilitar la insercion de "concurrencia" en el modelo, se agregan los campos que se desea puedan
+		insertar de esta forma
+		protected $fillable=["campo1","campo2"...];
+		--------------------------------------------------------------------------------------------
+
+	UPDATE $variable=Modelo::find(idbuscado);
+		$variable->campo="valor";
+		&variable->save();
+
+		Modelo::where("campo","valor")->update("campo",valor);	aqui no crea una instancia del modelo, sino
+		que trabaja con la clase estatica ???
+		
+		Modelo::where("campo","valor")->where("campo","valor")->update("campo",valor); para mas de un filtro
+
+	DELETE $varieble=Modelo::find(id);
+		$variable->delete();
+
+		Modelo::where("campo","valor")->delete(); borrado por criterio
+
+		SOFT DELETE borrado tipo papalera de reciclaje
+		(video 25)
+
+3 relaciones entre tablas (*) en cada modelo se debe agregar el use con la ruta del otro modelo que se utiliza.
+	cada modelo pude tener mas de una function definiendo sus relaciones
+
+	UNO a UNO en el modelo de la segunda tabla "jerarquica" se pone la funcion
+		public function NombreModelo1Singular <pg cliente>()
+		{
+			return $this->hasOne("App\Modelo1 <pg Cliente>");
+		}
+		
+		en el otro modelo, se crea la contraparte para poder hacer uso inverso de datos
+		public function NombreModelo1Singular()
+		{
+			return $this->belongsTo("App\Modelo1"); ***??? aun no revisado
+		}
+
+		la instruccion para regresar valores relacionados seria:
+		return Cliente::all()
+			retorna todo
+		return Cliente::find($id)->articulo
+			retorna para el modelo Cliente busca el numero XX y devuelve todo el objeto -campos- de articulo 
+		$mytype=Type::orderby("type","asc")->get();
+		return cliente::find($id)->articulo->where("campo"."criterio");
+
+	UNO a VARIOS en la tabla que guarda los UNO
+		public function NombreModelo2Plural()
+		{
+			return $this->hasMany("App\Modelo2");
+		}
+		
+		la instruccion para regresar los valores es la misma que la de uno a uno, solo que aqui se debe
+		utilizar un foreach para el manejo del conjunto de datos
+
+		la misma instruccion que uno a uno para la inversa.
+		public function NombreModelo1Singular()
+		{
+			return $this->belongsTo("App\Modelo1");
+		}
+
+	VARIOS a VARIOS la tabla pivote se nombrara alfabeticamente tabla1_tabla2, no es necesaria su key local,
+		unicamente las foraneas.
+		public function NombreModelo2Plural()
+		{
+			return $this->belongsToMany("App\Modelo2");
+		}
+
+		la inversa
+
+		public function NombreModelo1Plural()
+		{
+			return $this->belongsToMany("App\Modelo1");
+		}
+
+
+	INSTANCIAR UN MODELO
+        --------------------
+	Modelo -> propiedad
+	Modelo -> metodo(). 
+
+	como ya se dijo tiene metodos preestablecidos
+	Modelo -> Save(),Modelo -> all(),Modelo -> find(), Modelo -> delete()...
+
+	PG MODELO User
+
+	$user=New User;
+	$user->name="nombre";
+	$user->save();
+
+
+
+
+
+
+
+RUTAS Y HOST VIRTUAL
+*************************************************************************************
+*************************************************************************************
+LO MAS RECOMENDABLE ES UTILIZAR EL Route::Resource('CARPETA','CONTROLADOR'), PUES CON ESA
+INSTRUCCION LARAVEL GESTIONA AUTOMATICAMENTE LAS RUTAS. RECORDAR QUE EN ESTE CASO, LARAVEL 
+PONDRA UN PREFIJO, POR EJEMPLO: recipes. + nombre del metodo en el controlador, AUNQUE EL
+LA REALIDAD NO SEA ASI LE ESTRUCTURA DE CARPETAS DEL PROYECTO.
+
+LAS RUTAS ACEPTAN DOS VERBOS:
+	Route::get ->manda informacion directo en la url
+	Route::post -> manda informacion del formulario
+
+		son variantes de post
+
+		Route::put
+		Route::delete
+		Route::
+		Route::
+
+	Route::mash -> evalua si es get o post
+	Route::any ->acepta cualquiera de todas	
+
+a partir de 5.6 ? se pueden llamar directamente las vistas desde una ruta
+
+	Route::view('/ruta','nombre_vista')
+
+
+
+RUTA RAIZ QUE RETORNA DATOS AL AIRE, O UNA VIEW "(inicio)" UBICADA EN VIEWS
+
+	Route::get('/', function () {
+		return "bienvenido"; 
+		//return view('inicio');
+		//return view('inicio',compact('$variable')); //se le manda una variable a la vista
+		//desde ahi ya se puede accesar desde codigo php
+	});
+
+	RUTA CON PARAMETROS 
+	Route::get('saludo/{nom}'),function($nom){
+		return "hola ". $nom;
+	});
+
+	PARAMETROS OPCIONALES Y VALIDACION
+	Route::get('saludo/{nom?}', function ($nom="") {
+    	return "hola ".$nom;
+	})->where('nom',"[A-Za-z]+");
+
+
+RUTA RAIZ QUE RETORNA DATOS DESDE EL CONTROLADOR
+	Route::get('/','estimationsController@index');
+
+
+RUTA QUE RETORNA DATOS DESDE EL CONTROLADOR
+	Route::get('/crear','estimationsController@create');
+
+
+PONER UN ALIAS A LAS RUTAS PARA MODIFICARLAS 
+	Route::get('/', ['as'=>'xxx', function () {
+		return "bienvenido"; 
+	}]);
+
+	EL LINK SERIA:
+	href=". route('xxx'.)">
+	
+	luego de eso ya se le puede cambiar cuantas veces se quiera la ruta desde el Route::get('/  '
+	sin tener que modificar nada mas
+
+	llamar la ruta con alias usando el controlador
+	Route::get('/',['as'=>'home','uses'=>'XXXController@home']);
+
+METODO AUTOMATICO QUE GENERA LAS RUTAS DESDE EL CONTROLADOR
+	Route::resource('estimations','estimationsController');
+	//1arg carpeta de las views, hay que crearla
+
+
+RUTAS AUTOMATICAS CON Route::resource
+CRUD
+*************************************************************************************************
+	INDEX es la view principal. por lo general, ahi se muestra de manera resumida en una tabla algun tipo 
+	de informacion general. la informacion viene del index del controlador
+
+	$myres=Recipe::orderby("id","desc")->paginate(10);
+        return view("recipes.index",compact("myres"));	
+
+	cuando se gestionana las rutas automaticamente, el insert lo implementa en dos procedimientos del controlador:
+	CREATE donde el controlador llama a una vista de insercion de datos
+	STORE que es propiamente el procedimieto que guarda los datos en la base
+
+		para implementar el store, desde el formulario que manda los campos se debe configurar en el action
+		el action="controller.store" y en al method="POST", ademas de que los controles deben tener el mismo 
+		nombre que en la base, pues el $request del store los toma asi
+
+		en el modelo se debe liberar la edicion de registros con
+
+		protected $fillable=["name","burn","notes"];
+
+		ya en el controlado, con esa linea CREA el registro usando TODO lo que viene del post del formulario
+		$request->validate([
+           	'name'=>'required',
+		'burn'=>'required',
+	        ]);
+		Pet::create($request->all());
+	
+	UPDATE Y DELETE	se crea una columna nueva en el index, dentro de esa dos elementos tipo boton primario
+	<th scope="col">ACTIONS</th>
+	
+	****DETALLE. COMO SON DOS BOTONES QUE OCUPAN DOS METODOS DISTINTOS, SE DEBE CREAR OTRO FORM PARA EL SEGUNDO
+	EN EL CUAL SE DECLARA SU PROPIO METHOD*****
+
+	el primero hiperlink <a></a> no lleva type porque solo llama a una vista y es en esa vista que se configura el method, en el
+	segundo <boton></button> si se pone type porque ejecuta directamente el destroy.
+
+      	<td><a class="btn-sm btn-info" href="{{route('pets.edit',$pet->id)}}">Editar</a>
+      
+      	<form action="{{route('pets.destroy',$pet->id)}}" method="POST">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Desea aliminar el registro')" class="btn-sm btn-danger">Eliminar</button></td>
+      	</form>
+    	</tr>
+	 
+	en el controlador se genera el vinculo a la vista
+	return view('pets.edit',compact('pet'));
+
+	en la vista se genera el formulario y los controles, el formulario define el metodo y el argumento
+	para modificar, segun las rutas automaticas, esta accion utiliza el metodo PUT
+
+	<form action="{{route('pets.update',$pet->id)}}" method="POST">
+	@method('PUT')
+
+	los controles se llenan con el registro actual a modificar
+	<input type="text" name="notes" value="{{$pet->notes}}" class="form-control" placeholder="notas" >
+
+	el metodo update del controlador es muy parecido al store, solo cambia, porque tiene los registros modificados
+	en la variable $pet
+	$pet->update($request->all());
+
+	SHOW el metodo show del controlador es util para generar vistas personalizdas, por ejemplo una vista tipo tarjeta 
+	con los datos basicos de cada registro. se utiliza una clase CARD de bootstrap y se le pasan los datos a traves de
+	la variable global
+		
+		
+	HOST VIRTUAL
+	desde laragon, la ruta del host es
+		
+	http://localhost/MYPROY/public/MIPROY ??
+
+
+
+
+
+
+
+
+
+BASE DE DATOS
+******************************************************************************************
+******************************************************************************************
+
+
+
+
+
+
+
+
+CONTROLADORES
+*************************************************************************************
+*************************************************************************************
+A LA PAR DE LAS RUTAS, SE CREA EL MODELO Y EL CONTROLADOR CON RECURSOS, SE DEBE SEGUIR UNA CONVENCION 
+DE NOMBRES, POR EJEMPLO EL MODELO CON MAYUSCULA AL INICIO Y EL SINGULAR
+
+php artisan make:model Modelo -mc --resource
+
+
+
+
+
+
+REQUEST
+*************************************************************************************
+*************************************************************************************
+ES EL CONJUNTO DE DATOS QUE SE GENERAN EN EL FORMULARIO Y QUE SE INVOCAN MEDIENTE PETICIONES
+
+
+
+ERRORES
+*************************************************************************************
+
+UNA FORMA MAS EFICIENTE DE TRATAR ERRORES ES CREAR REQUEST SEPARADOS PARA EL ELEMENTO DEL CONTROLADOR, ASI
+SE IMPLEMENTAN DE MANERA MAS PROFESIONAL, Y NO QUE FUNCIONE DENTRO DEL MISMO CONTROLADOR. NOTAR QUE ES UN 
+REQUEST POR FUNCION
+
+	php artisan make:request ModeloFuncionRequest
+	...
+EN APP/HTTP/REQUEST, EL REQUEST RECIEN CREADO QUEDA ASI, NOTAR COMO SE HACE VALIDACION MULTIPLE, SEPARANDO CON |:
+
+se referencia al modelo que servira
+
+...
+use app\Modelo
+
+public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'name'=>'min:5|max:100|required',  //VALIDAR QUE SEA UNICO EN LA TABLA: |unique:tabla
+            'burn'=>'required',
+        ];
+    }
+
+    ///se agrega una nueva funcion con los mensajes de error
+    public function messages()
+    {
+        return [
+            'name.required'=>'campo nombre es requerido',
+            'burn.required'=>'campo burn es requerido',
+        ];
+    }
+
+EL CONTROLADOR *MODELO QUEDA ASI:
+SE REFERENCIA AL REQUEST CREADO
+
+...
+use app\Http\Requests\StoreRequest
+
+*******ojo con las referencias, son sensitive*************
+
+public function store(StoreRequest $request)
+    {
+       
+        Pet::create($request->all());
+
+UNA VEZ HECHO ESTO, SE PUEDEN IMPLEMENTAR MEJOR UNA SERIE DE REGLAS DE VALIDACION, SOBRE LAS CUALES EXISTE
+REFERENCIA EN LA PAGINA DE PHP
+
+EN LOS ELEMENTOS DE LA VISTA QUE SE VALIDARAN SE LE PONE REFERENCIA AL REQUEST
+ <input type="text" name="name" class="form-control" placeholder="nombre de la mascota" >
+            @if($errors->has('name'))
+                <strong class="text-danger">{{$errors->first('name')}}</strong>
+            @endif
+PARA QUE NO SE PIERDA EL VALOR DE LOS CAMPOS EN EL POST, A CADA CAMPO SE LE PONE QUE MANTENGA SU VALOR ANTERIOR
+value="{{old('name')}}"
+
+DATOS
+*************************************************************************************
+
+Return Request::all(); muestra todo lo que ha mandado el formulario, token, controles, etc
+
+
+
+
+
+
+
+
+
+PLANTILLAS BLADE
+*************************************************************************************
+*************************************************************************************
+LO IDEAL ES ABRIR UNA CARPETA LAYOUTS PARA LAS PLANTILLAS, PERO ES OPCIONAL
+
+1 EN LA PLANTILLA IRA EL CONTENIDO QUE SE REPITE, Y DONDE SE QUIERA ABRIR PARA PONER CONTENIDO
+PERSONALIZADO SE ABRIRA UNA SECCION
+
+	@yield('content') por ejemplo, se puede llamar como sea
+
+2 EN LAS VIEWS QUE IMPLEMENTAN INICIAN CON 
+	
+	@extends('carpeta.nombre_view')
+
+	en la parte personalizada se ponda la seccion y el contenido particular de esa view
+
+	@section('content')
+		...contenido
+	@endsection 
+
+3 DISEÑO:
+
+	1 UTILIZAR ALGUN ESTILO DE BOOTSRAP
+
+	2 PARA QUE NO OCUPE EL TOTAL DEL ESPACIO DEL EXPLORADOR, UTILIZAR <DIV CLASS="CONTAINER"></DIV>
+
+
+
+
+
+
+
+
+
+DATOS
+*************************************************************************************
+*************************************************************************************
+PASAR TABLA COMPLETA A VISTA
+
+en el controlador se crea el conjunto de datos y se pasa a la vista
+	//para mandar los resultados paginados
+	//$pets=Pet::orderby("id","desc")->paginate(10);
+
+	$pets=Pet::all();
+        return view("pets.index",compact("pets"));
+en la vista se crea la tabla html y se llena con la variable pasada
+	...
+	<tbody>
+	    @foreach($pets as $pet)
+	    <tr>
+	      <th scope="row">{{$pet->id}}</th>
+	      <td>{{$pet->name}}</td>
+	      <td>{{$pet->burn}}</td>
+	      <td>{{$pet->notes}}</td>
+	    </tr>
+	   @endforeach
+
+	//al final de la tabla se pone el link de la paginacion
+	//...</table>
+	//{{$pets->links()}}
+
+en el modelo se habilita la modificacion 
+	protected $fillable=["campo1","campo2"];
+
+
+
+
+
+
+LOGIN
+*************************************************************************************
+*************************************************************************************
+POR DEFAULT LARAVEL CREA DOS TABLAS PASSWORD RESETS Y USERS, LAS CUALES SE MANTIENEN INTACTAS HASTA QUE SE HABILITA
+LA AUTENTICACION CON EL COMANDO
+
+	php artisan make:auth
+
+	laravel 6.0
+	composer require laravel/ui
+	php artisan ui vue --auth
+	php artisan ui:auth
+	
+	//para bootstrap
+	php artisan ui bootstrap
+	php artisan ui bootstrap --auth
+	npm install
+	npm run dev
+
+CON ESTO, LARAVEL HABILITARA UN MENU CON LAS OPCIONES DE LOGIN y CREARA UNA SERIE DE OBJETOS, ENTRE LOS QUE SE 
+ENCUENTRA LA VISTA HOME EN LA CARPETA RAIZ "VIEWS", TODO ESTO ESTA VINCULADA A UNA BASE DE DATOS DE USUARIO
+QUE SE ENCUENTRA INMERSA EN CADA BASE DE DATOS DEL SERVIDOR (LOCAL A CADA BD), INDEPENDIENTE DEL SISTEMA 
+GENERAL DE PERMISOS
+
+EL OBJETO O CLASE MAS IMPORTANTE ES AUTH, LA CUAL CONTIENE METODOS Y PROCEDIMIENTOS
+
+	$nom=Auth::user(); //-----la variable guardara el nombre del usuario 
+	$log=Auth::check(), //------boleano del status autenticado
+
+	Auth::user()->hasRole('admin') //si el usuario tiene un rol admin
+
+
+
+
+ROLES MIDDLEWARE
+*******************************************************************************************
+*******************************************************************************************
+MIDDLE
+	la autenticacion debe usar middleware con una estructura de user-rol-roluser, 
+	ya que se pretende que los usuarios puedan tener mas de un rol. el ejempo de 
+	juan diaz funciona bien.
+
+	middleware: define a que objetos se tiene acceso
+	funciones: las funciones en modelos definen los detalles del acceso
+	ruta: implementa el middleware
+	kernel: declara al middleware en el sistema
+
+COMIENZA CON LA CREACION DEL MIDDLEWARE EN LA CONSOLA
+
+	php artisan make:middleware RoleMiddleware
+
+LUEGO SE REGISTRA EN EL ARCHIVO KERNEL.PHP
+	para las rutas o para el sistema en general
+
+	'role' => \Illuminate\Http\Middleware\RoleMiddleware::class,
+	'esAdmin' => \Illuminate\Http\Middleware\esAdmin::class,
+
+HAY QUE CREAR LA TABLA ROLES Y SU RELACION VARIOS A VARIOS CON USERS
+
+	php artisan make:model Role -mc --resource
+
+	OJO: PARA CREAR LAS RELACIONES EN LAS TABLAS PRINCIPALES QUE USAN bigIncrements, 
+	LAS LLAVES FORANEAS DE LAS TABLAS RELACIONADAS DEBEN SER bigInteger
+
+EN LA MIGRACION DE LA TABLA USER CREAR LA FK role_id
+
+EN LA MIGRACION DE LA NUEVA TABLA ROLES TAMBIEN SE CREA EL CAMPO NOMBRE
+
+EN EL MODELO Role CREAMOS LA RLACION
+
+	return $this->belongTo('App/Role');	
+
+
+-----------------------------------------------------
+*********** ROLES Y PERMISOS CON AUTH **************
+-----------------------------------------------------
+videos 33-37 de raul palacios
+
+1 se genero el entorno de user register con AUTH
+
+2 se creo y personalizo la migracion roles al agregarle un campo
+
+    *****en este punto queda el primer hueco: no hay forma de que al crear un 
+    usuario tome algun rol, se debe modificar la vista de registro para que
+    tome algun valor por defecto****
+
+3 se puso un valor default al campo role_id de la tabla usuario (3-guess), 
+pues lo logico es que las cuentas iniciales de los usuarios sean de este 
+tipo
+
+   $table->integer('role_id')->default('3');
+
+4 se creo la tabla pivote role_user para relacionarlas varios a varios,
+agregando los id de roles y usuarios.
+
+5 se crean las definiciones de las relaciones en los respectivos modelos
+...belogsToMany...
+
+    ******aqui sale otro problema, debe haber algun modulo de administracion de
+    roles. en este, el alta debe contemplar un metodo para agregar tambien las
+    claves en la tabla piloto. en el video utiliza seeders que llaman a un metodo
+    ATACH. buscar referencia*******
+
+    ****Pagina: Autenticación de Usuarios y Roles en Laravel 5.5 - Claudio Vallejo - Medium
+	Dentro del proyecto: proyecto_roles****
+
+	1.- se corre el comando artisan: php artisan make:seeder TableRolSeeder
+
+	
+
+6 en el modelo user se implementaron 3 procedimientos para verificar los permisos
+del usuario que desencadena la peticion
+
+7 en el controlador de cada proceso se introduce el filtro para decidir que
+permisos aplican o no a cada accion. parecido a asp.mvc
+
+    por ejemplo en el index de recipes:
+
+     $req->user()->authorizeRoles(['guess','user']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VENTANAS Y ELEMENTOS EMERGENTES
+**********************************************************************************************
+**********************************************************************************************
+MANDAR UNA ETIQUETA EMERGENTE 
+	EN EL EVENTO QUE LA GENERA
+	Session::flash('message','Registro modificado');
+
+	EN DONDE SE MUESTRA
+	@if(Session::has('message'))
+	<div class="alert alert-info" >{{session::get('message')}}</div>
+	@endif
+
+
+
+
+
+BOOTSTRAP
+************************************************************************************************
+************************************************************************************************
+SE PUEDEN REESCRIBIR LAS CLASES DE BOOTSTRAP PARA PERSONALIZARLAS. PARA ELLO SE CREA UN ARCHIVO DE ESTYLO
+EN LA CARPETA PUBLIC/CSS
+
+SE REFERENCIA EN LA PLANTILLA 
+	<link rel="stylesheet" href="{{asset('css/styles.css')}}">
+	-----------------------
+	para fuentes de google
+	<link href"https://fonts.googleapis.com/css?family=modak" rel="stylesheet">
+
+	y en el elemento:
+	en vez de bg-ligth se pone bg-custom
+	----------------------------
+	en el elemento donde se quiere cambiar la fuente
+	<a class="navbar-brand logotext" href="#">Pets</a>
+
+SE REESCRIBEN LAS CLASES
+	.bg-custom{
+	    background-color: chocolate;
+	}
+	----------------------
+	en el mismo archivo de estilos
+	.logotext{
+ 	   font-family: 'modak',cursive;
+	    font-size: 30;
+	}
+
+ICONOS. por ejemplo del sitio Font Awesome
+	se copia el Link para referenciarlo al inicio
+	   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	se pega el elemento en el lugar donde se desea que aparezca
+           <td><a class="btn btn-primary" href="{{route('pets.edit',$pet->id)}}"><i class="far fa-edit"></i></a>
+
+
+
+
+
+COMANDOS ARTISAN
+*************************************************************************************************
+*************************************************************************************************
+
+php artisan migrate:rollback	deshace el ultimo comando ejecutado, asi no tendria uno que ejecutar toda la
+				migracion
+
+php artisan make:migration update_nomtabla_table --table="nomtabla"	por ejemplo para realizar modificaciones
+				a las tablas, sin necesidad de borrarla toda.
+				si por jemplo agregamos un campo, en la seccion down se debe poner la instruccion
+				que lo quite:
+				
+				$table->DropColumn("nomcampo");
+
+php artisan migration:reset	elimina todas las migraciones
+
+
+
+
+
+
+REPORTE PDF**********************************************************************************************
+*********************************************************************************************************
+	SE AGREGA AL BLOQUE REQUIRE, DEL ARCHIVO COMPOSER.JSON
+	
+	EN LA CARPETA DEL PROYECTO SE CORRE
+	composer require barryvdh/laravel-dompdf
+
+	LUEGO SE AGREGA UNA DIRECTIVA Y UN FACADE EN APP.PHP
+
+	Barryvdh\DomPDF\ServiceProvider::class,
+	'PDF'=>Barryvdh\DomPDF\Facade,
+
+	SE CONFIGURA LA RUTA
+
+
+	SE CONFIGURA EL PROCEDIMIENTO O FUNCTION DEL CONTROLADOR
+
+
+	Y LA VISTA QUE SERA EL REPORTE
+	
+
+	
+VIDEO: https://www.youtube.com/watch?v=slCwrm64IWA
+
+
+
+
+
+RECURSOS*************************************************************************************************
+*********************************************************************************************************
+STARTER TEMPLATE
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+BARRA DE NAVEGACION
+
+
+
+TABLA
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+	

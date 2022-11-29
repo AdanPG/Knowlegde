@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--es el lugar donde normalmente se ubica la referencia
+    la ejecucion es secuencial, por lo que el alert se ejecutara antes
+    que el boy-->
+    <link href="micss.css" rel="stylesheet">
+
+    <!--
+    <script>
+        alert('me ejecuto secuencial, antes que el body');
+        document.write('otra forma de escribir sobre el documento');
+    </script>
+    -->    
+    
+
+    <!--ahora con una referencia externa
+    <script src='eje.js'></script>-->
+
+    <!--jquery es una libreria con funciones que podemos utilizar para
+    ahorrar codigo, en este caso utilizaremos una que se llama fadein-->
+    <script src="jquery-1.6.3.min.js"></script>
+    <script>
+        $(function(){
+            $('body').hide().fadeIn(9000);
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+    <h3>algun contenido del body</h3>
+    <img src="arbol.jpg" alt="">
+    
+</body>
+
+<!--video 3 min 18-->
+</html>
+

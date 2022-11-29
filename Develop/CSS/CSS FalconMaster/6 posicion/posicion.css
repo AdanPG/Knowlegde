@@ -1,0 +1,43 @@
+div{
+    background-color: blue;
+    height: 50px;
+    width: 50px;
+    margin:5px;
+
+    font-size:20px;
+    color: aliceblue;
+}
+
+.relative{
+    position: relative;
+    margin-left: 50px;
+}
+
+
+.absolute{
+    position: absolute;
+    margin-left: 50px;
+}
+
+
+.fixed{
+    position: fixed;
+    left :500px;
+    top: 500px;
+}
+
+.float{
+    height: 600px;
+    width: 600px;
+    float: right;
+}
+
+
+.floatxx{
+    float:right;
+    border-style: dotted;
+}
+
+#br{
+    clear: both ;
+}

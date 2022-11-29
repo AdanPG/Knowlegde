@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TipoCuenta>
+
+
+@{
+    ViewData["Title"] = "Tipos cuentas";
+}
+
+<h1>Tipos de cuentas</h1>
+<h5>Ejem: préstamos, tarjetas, etc</h5>
+
+<a asp-action="Crear" classaccesskey="btn btn-primary mb-3">Crear nuevo</a>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Acciones</th>
+            <th>Nombre</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var tipoCuenta in Model)
+        {
+                    
+            <tr>
+                <td>
+                    <!--desde aqui se llama al procedimiento para editar-->
+                    <a class="btn btn-primary" asp-action="Editar" asp-route-id="@tipoCuenta.id">Editar</a>
+                    <a class="btn btn-danger" asp-action="Borrar" asp-route-id="@tipoCuenta.id">Borrar</a>
+                </td>
+                <td>
+                    @tipoCuenta.nombre
+                </td>
+            </tr>         
+
+        }
+    </tbody>
+
+</table>

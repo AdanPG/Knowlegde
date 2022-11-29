@@ -1,0 +1,176 @@
+se supone que una red de dominio centraliza la administracion y permisos en 
+redes medianas y grandes, de manera que es mas facil que hacerlo mauina por maquina
+en el entorno de grupos de trabajo. en el dominio las maquinas se autentican
+en un servidor, y es este el que propaga sus posibilidades.
+
+
+instalacion
+
+	poner un nombre operativo y logico
+	poner una ip fija
+	deshabilitar protocolo v6
+	poner la mascara pg el modem
+
+	como DNS se pone la del mismo modem ***CUIDADO PORQUE EN LA CONFIGURACION 
+	SE VA CAMBIANDO AUTOMATICAMENTE
+
+habilitarlo como servidor de dominio
+	se agrega un rol, habilitando la opcion servidor de dominio de active directory
+
+	**** se muestra la opcion de promover a servidor de dominio
+	agregar un nuevo bosque para cuando se quiere iniciar de cero
+
+	dominio raiz, es la misma logica que los dominios de internet
+
+	se supone que todo este dominio sera el subfijo de los recursos
+	que se vaya agregando al dominio. xxxx.xxx sera xxxx\xxxxxxx
+
+	este rol agrega implicitamente la opcion de servidor DNS, por lo tanto
+	mueve la configuracion de la red a local host: 127.0.0.1, pero 
+	ojo, SE DEBE regresar a la ip a la del presente, porque ya se ha agregado
+	la funcionalidad de servidor DNS, como se dijo antes.
+
+colaboracion entre servidores, configurar un segundo servidor de dominio
+
+	agregar un controlador de dominio a un dominio existente
+
+	**ojo** 
+	https://www.youtube.com/watch?v=pS9ri0WLtCc&list=PLEc4fBS9PwrYDjHyIOHM2xZ8Se5RcpXUL&index=2
+	
+	en el video se autentica con DOMINIO\usuario
+
+	cuidado con cambiar la ip de servidor DNS del primero, porque se mueve
+	luego de ello se debe refrescar la cache con
+
+	ipconfig /flushdns
+
+	servidor DHCP como complemento de funcionalidad. un servidor puede ser unicamente servidor
+	DHCP, sin necesidad de tener active directory. sin embargo, tambien debe formar
+	parte de un dominio???
+
+	luego requiere configurar el servicio dhcp:
+	
+	ipv4-ambito nuevo
+	se le da el intervalo de ips que va a administrar
+	exclusiones, que son las de los servidores
+	tiempo de vida de la concesion
+
+unir un equipo al dominio
+
+	el cliente debe cumplir ciertos requisitos: deshabilitar ipv6, tomar 
+	automaticamente ipv4
+
+	inicialmente unira al dominio y se autenticara con la cuenta de administrador
+	del servidor xxxx\Administrador, se usa una cuenta con permisos para unir al dominio.
+	se supone que mas adelante se creara una cuenta especial en el servidor con permisos
+	para administrar al cliente.
+
+	en w10 se pudo unir el cliente hasta que se le puso una ip fija, en servidor dns se le
+	puso la ip del servidor 2019, ya que se habilito como dns. tambien tomar en cuenta las 
+	recomendaciones del video de jay negro: como unir un cliente windows a un dominio windows
+	server 
+	
+	
+	**RECOMENDABLE**
+	el esquema general de permisos debe estar basado en un esquema similar al de la empresa,
+	y representado por unidades organizativas creadas en el servidor.
+
+	**RECOMENDABLE**
+	la nomenclatura de permisos debe ser coherente. se propone nom.apellido.apellido
+	nom1+inicialnom2.apellido.apellido
+
+	se crea el password que se le dara al cliente, marcando la opcion de que debe cambiarla
+	el el primer inicio. esto cuando se trata de una cuenta autoadministrada.
+
+	La idea es crear una jerarquia de grupos los cuales contendran los permisos. recordar que
+	se pueden anidar grupos. los usuarios unicamente se agregaran a los grupos, de manera que
+	no se tenga que poner permisos a usuarios individuales.
+
+
+seguridad GPO
+	por lo visto, el esquema de seguridad se realiza mediante UNIDADES ORGANIZATIVAS las cuales
+	contienen grupos y usuarios y se estructuran preferentemente de manera similar al organigrama
+	de una empresa. Y GPO´s, las cuales contienen las restricciones que se convengan a nivel USUARIO
+	y a nivel EQUIPO. desde el panel "Administracion de directivas de grupo", se agrega un nuevo 
+	objeto "Objeto de directiva de grupo". luego editar, en la directiva creada, a nivel de equipo 
+	o de usuario. Teniendo la politica de grupo, unicamente se arastra hacia la unidad organizativa.
+
+	2 enfoques: el en primero solo se arrastra la politica a la unidad, de anera GLOBAL, para todo el
+	dominio
+
+	en el otro, de laboit, se crean usuarios y grupos por unidad organizativa, y es a traves de estos
+	que se implementan la serie de restricciones. una seguridad mas granular
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                  
+
+	
+
+
+
+********************************************************************
+ELEMENTOS CRITICOS DE IMPLEMENTACION
+
+tener un dominio no valido que hará conflicto mas adelante
+   valido : lan.trochanet.com 
+   ver actualizacion
+
+usar una cuenta administrador para accesar desde maquinas no seguras o para el uso diario
+
+no tener activo la prevencion de borrado accidental de ua
+
+no tener activado el respaldo de sistem state
+
+tener un solo servidor de dominio
+   puede ser virtualizado el segundo o tercero
+
+
+video: 5 pecados de active directory
+de victor burgos
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\2Portafolio.exe
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\appsettings.json
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\2Portafolio.dll
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\2Portafolio.deps.json
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\2Portafolio.runtimeconfig.json
+C:\Users\adan\Desktop\Repositorio\know\Develop\MVC\cursos 2022 udemy\1 intro\2Portafolio\2Portafolio\obj\Release\net6.0\PubTmp\Out\2Portafolio.pdb

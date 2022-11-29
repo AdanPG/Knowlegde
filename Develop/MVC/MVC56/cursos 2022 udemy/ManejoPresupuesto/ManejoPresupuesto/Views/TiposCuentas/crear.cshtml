@@ -1,0 +1,97 @@
+﻿@model TipoCuenta
+
+@{
+
+    ViewData["Title"] = "Crear tipo cuenta";
+}
+
+<h5>Tipos de cuentas</h5>
+<h3>Formulario</h3>
+
+<div asp-validation-summary="ModelOnly" class="text-danger">
+    <!--solo que cache los errores del modelo, no todos-->
+
+</div>
+
+<!--se obvia la llamada al controlador porque lo busca por default, tiene el mismo nombre-->
+<form asp-action="crear" >
+
+    <!--@Html.AntiForgeryToken()-->
+
+    <div class="mb-3">
+
+        <!--con ASP-FOR, junto con el modelo como argumento, haran que la data capturada no se borre, en caso de haber error
+            hasta el caption se quita
+        -->
+       <label asp-for="nombre" class="col-form-label">Nombre</label>
+       <!--<input type="text" id="nombre" name="nombre" class="form-control"/>  por esta otra opcion de codigo embebido:
+            @Html.TextBoxFor(x => x.nombre,
+               new { @class = "form-control", placeholder = "pon el nombre", autofocus = "autofocus" })
+            @Html.ValidationMessageFor(x => x.nombre, null, new { @class = "text-danger" })
+       -->
+       
+       <input type="text" asp-for="nombre" class="form-control"/>
+       <span asp-validation-for="nombre" class="text-danger"> </span>
+
+       <!--
+           cuando las validaciones son muy especificas, hay que crearlas, se hace con una crpeta y dentro una clase de c# que herede
+           de validationatribute, hay que crear los procedimientos manualmente
+       -->
+
+
+     
+
+
+
+
+       <!--campos de prueba para ver validaciones, notar que con asp-for se simplifica
+           pues esta vinculado al modelo.
+
+           Se usan otras validaciones porque las de los data annotation no son suficientes, 
+           siempre salen otros detalles que controlar. 
+           para validacion con jquery se le pone un span debajo del control
+      
+       <div class="mb-3">
+            <label asp-for="Email" class="col-form-label"></label>
+            <input type="text" asp-for="Email" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"> </span>
+        </div>
+
+         <div class="mb-3">
+            <label asp-for="Edad" class="col-form-label"></label>
+            <input type="text" asp-for="Edad" class="form-control"/>
+             <span asp-validation-for="Edad" class="text-danger"> </span>
+        </div>
+
+         <div class="mb-3">
+            <label asp-for="URL" class="col-form-label"></label>
+            <input type="text" asp-for="URL" class="form-control"/>
+             <span asp-validation-for="URL" class="text-danger"> </span>
+        </div>
+
+         <div class="mb-3">
+            <label asp-for="TarjetaCredito" class="col-form-label"></label>
+            <input type="text" asp-for="TarjetaCredito" class="form-control"/>
+             <span asp-validation-for="TarjetaCredito" class="text-danger"> </span>
+        </div>   -->
+       
+    </div>
+
+
+
+
+     <button type="submit" class="btn btn-primary">Enviar</button>
+     <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+
+</form>
+
+<!----
+se pueden incluir scrpts, pero deben ir al final, hay que agregar la referencia a jquery, esta en shared _validationscriptspartial
+con eso se ponen las validaciones bajo cada campo. OJO, todas estas validaciones se ejecutan ANTES que la llamada al controlador,
+lo cual es una llamada al servidor. Esta ultima se realiza si jquery pasa
+
+-->
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}

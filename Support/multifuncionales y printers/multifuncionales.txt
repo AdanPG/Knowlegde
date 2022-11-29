@@ -1,0 +1,66 @@
+
+
+saber ip de la multi
+saber usuario y contraseña de servicio de la multi
+nombre de la maquina, usuario y contraseña de la maquina del usuario que
+quiere utilizarla
+
+***************CANON************************
+********************************************
+
+
+-se entra a host del la multi canon
+-se busca al usuario que debe estar en la lista
+	-si no esta se debe agregar, hay que saber
+	su usuario y contraseña
+
+-en el menu de la izquierda *libreta de direcciones* 
+se configuran las distintas opciones, la carpeta a la cual se manda desde el scanner
+que previamente se agrego y compartio para todos, desde el raiz c:
+
+	-si da problema hay quw hailitar el complemento SMB de
+	windows
+
+-ya desde la maquina se manda los scann selecionando el destino, usuario y contraseña 
+desde su panel frontal
+
+
+**************HP********************************
+************************************************
+
+
+	crear la carpeta en raiz, compartirla y darle permisos a todos
+
+	ir a scanner, carpetas almacenamiento de red
+	añadir, aqui es como el nombre del recurso
+	
+	luego configurar
+	se agrega la ruta, que es por lo general es " \\" mas el nombre de dominio 
+	mas "\" la ruta local
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

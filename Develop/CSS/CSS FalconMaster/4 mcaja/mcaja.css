@@ -1,0 +1,22 @@
+div{
+    border-style: solid;
+    height: 100px;
+    background-color: rgb(108, 200, 96);
+}
+
+p{
+    background-color: rgb(91, 80, 158);
+    color: rgb(250,250,250);
+    padding: 10px;
+    margin: 19px;
+}
+
+a{
+    border-style: solid;
+    background-color: aquamarine;
+}
+
+.bloque{
+    width: 300px;
+    display: inline-block;
+}

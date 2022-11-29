@@ -1,0 +1,44 @@
+DELIMITER //
+
+CREATE PROCEDURE EDAD(AN INT)
+
+	BEGIN
+	DECLARE AA INT DEFAULT 2016;
+	DECLARE EDAD IN;
+
+	SET EDAD=AA-AN;
+	SELECT EDAD
+
+	END;//
+DELIMITER ;
+
+
+
+
+DELIMITER //
+
+CREATE TRIGGER REV_PRECIO_BU_TG
+BEFORE UPDATE
+ON PRODUCTOS
+
+FOR EACH ROW
+	BEGIN
+	IF(NEW.PRECIO<0)
+		SET NEW.PRECIO=OLD.PRECIO;
+	ELSEIF(NEW.PRECIO>1000)
+		SET NEW.PRECIO=1000;
+	END IF;
+	END;//
+DELIMITER ;
+
+
+
+
+**************************************************************************
+CREATE TRIGGER xtg_StatInicial_AI
+AFTER INSERT 
+ON estimacions 
+
+FOR EACH ROW
+INSERT INTO procesos(estimacion_id,numrevision,status_id,fecstatus,usuario_id,realizo)
+VALUES(new.id,1,1,NOW(),0,CURRENT_USER)

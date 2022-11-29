@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "6aef799c-49b9-4e28-a36b-1c1ccd551e90": {
+      "ProjectGuid": "6aef799c-49b9-4e28-a36b-1c1ccd551e90",
+      "DisplayName": "CrudUsers",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

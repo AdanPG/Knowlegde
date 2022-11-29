@@ -1,0 +1,7 @@
+body{
+    background:url("blanco.jpg");
+    background-size: 100%;
+
+    /*el fondo queda fijo a pesar del scroll*/
+    background-attachment: fixed;
+}

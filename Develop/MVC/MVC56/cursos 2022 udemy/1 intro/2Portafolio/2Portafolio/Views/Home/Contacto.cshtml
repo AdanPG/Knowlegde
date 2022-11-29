@@ -1,0 +1,36 @@
+﻿
+@{
+}
+
+<div class="container">
+    
+    <h1>Formulario de contacto</h1>
+
+    <!--OJO las propiedades del formulario para ir al procedimiento del controlador-->
+    <form asp-controller="Home" asp-action="contacto">
+        <div>
+
+            <!--OJO la propiedad name debe coincidir con el nombre del campo de la clase
+                propiedad for: al darle click tomara foco el control nombre
+            -->
+
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="ombre" name="nombre" placeholder="texto por defecto"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder=""/>
+        </div>
+
+
+        <div>
+            <label for="mensaje" class="form-label">Mensaje</label>
+            <textarea class="form-control" id="mensaje"  name="mensaje" rows="3" placeholder=""></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Enviar</button>
+
+    </form>
+
+</div>

@@ -1,0 +1,13 @@
+/*selectores descendentes
+seleccionar un elemento que se encuentre dentro de otro
+*/
+
+
+.p2 a{
+    color :red;
+    font-size: 25px;
+}
+
+a[href="www.milink.com"]{
+    color:orange;
+}

@@ -1,0 +1,15 @@
+﻿@model TipoCuenta
+
+@{
+    ViewData["Title"] = "Borrar el tipod e cuenta";
+}
+
+<h3 mb-3>Seguro que desea borrar?</h3>
+
+
+<!--de qui a modificar el boton de borrado del index-->
+<form asp-action="BorraTC">
+    <input type="hidden" asp-for="id"/>
+    <button type="submit" class="btn btn-danger">Borrar</button>
+    <a class="btn btn-secondary" asp-action="index">Cancelar</a>
+</form>

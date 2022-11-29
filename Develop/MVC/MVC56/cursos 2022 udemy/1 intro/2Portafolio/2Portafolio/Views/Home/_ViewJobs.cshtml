@@ -1,0 +1,26 @@
+﻿<!--
+    OJO. se de ve el detalle de Model dice Dinamyc, eso quiere decir que ya no cuenta con la seguridad de los datos tipados porque esta utilizando la referencia
+    del index, lo que se hara es citar el modelo desde el cual ( model HomeIndexVM ) se le da el TIPO DE DATO
+
+    el inconveniente es que la vista parcial quedara limitada si es que se desea utilizarla como vista parcial en otra parte, de tal manera que no debe ser el tipo
+    de dato, sino la propia coleccion
+
+    de esta forma ya no se tendra que pasar por homeindexvm para llegar al ienumerable, sino que el propio model sera el ienumerable. solo que desde el index hay que pasar
+    el parametro
+
+
+
+
+-->
+@model IEnumerable<claJob> //HomeIndexVM
+
+
+@if (Model is not null)
+{
+    <div class="text-center" style="padding-top: 6rem">
+        <h1>Mis trabajos recientes</h1>
+
+        <!--aqui se agrego otra vista parcial de solo la lista de jobs-->
+       <partial name="_ViewOnlyListJobs" model="Model">
+    </div>
+    }

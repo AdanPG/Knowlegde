@@ -1,0 +1,19 @@
+﻿@model IEnumerable<claJob>
+
+@{
+    ViewData["Title"] = "Todos mis trabajos";
+}
+
+<div class="container">
+    <h1>Mis Jobs</h1>
+    <p>
+        Aqui presento TODOS los trabajos que he tenido
+    </p>
+
+</div>
+
+ <!--ojo, aqui quiero mostrar solo la lista de jobs, esa ya esta en una vista parcial, solo que ya tiene un parrafo que dice 
+        qu presenta alguno de tus trabajps. asi que haremos otra vista parcial donde solo este la lista sin parrafos
+    -->
+
+      <partial name="_ViewOnlyListJobs" model="Model">

@@ -1,0 +1,34 @@
+compartir en w10
+
+la opcion de grupo hogar es un metodo para implementar facilmente en una lan habilitando los recursos del perfil de
+usuario, al parecer este metodo ya no esta dispobinle en las actualizaciones de w10
+
+
+-1 poner nombre del equipo facil de detectar
+
+-2 camiar a privado el perfil de usuario en la red. a la par habilitar la deteccion de red y recursos 
+compartidos para el perfil seleccionado, que normalmente sera el privado. recordar que el publico es
+mas riesgoso.
+
+-3 habilitar redes y recursos compartidos
+
+
+existen ediciones que no traen habilitado la opcion de xxx SMB en los componentes de windows,
+hay que habilitarlo. el caso de enterprise ya viene acivado. lo mismo para la opcion de usuario 
+anonimo en las directiva locales.
+
+en maquinas virtuales hay que cambiar la propiedad de la red, de NAT a ADAPTADOR PUENTE, de lo contrario no
+se puede accesar. luego de eso se habilitan los permisos por usuario. no funciono con el invitado
+
+Habilitar invitado puede ser util para compartir en una lan. recordar que viene deshabilitado por defaut. para
+habilitarlo hay que ir a gpedit-opciones administrativas-red-lanman-habilitar usuario anonimo. otra forma es con el 
+comando: net user invitado /active:yes. y la otra es con la configuracion de usuarios y grupos en el panel de control.
+en un video crearon al usuario invitado y lo metieron al grupo invitados. es una opcion interesante a revisar. en la 
+compu se me hizo dificil, al parecer se debe reiniciar la maquina, porque de repente funciono.
+
+en directivas de seguridad local, asignacion de derechos de usuario, cambiar denegar acceso desde la red
+quitrar el invitado de la lista
+
+
+otra forma es compartir por ftp, a traves de iis
+https://www.youtube.com/watch?v=Num71uCLVDo

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<claJob>
+
+    @if (Model is not null){
+
+    
+     <div class="container">
+            <div class="row row-cols-1 row-cols-sm-3 g-4">
+                @foreach (var j in Model )
+                {
+                    <div class="col">
+                        <div class="card h-100">
+
+                            <div class="car-body">
+                                <h5>@j.Titulo</h5>
+                                <h5>@j.Descripcion</h5>
+                                <h5>@j.ImagenURL</h5>
+                                
+                            </div>
+
+                            <div class="card-footer">
+                                <a class="btn btn-info" href=@j.Link target="_blank" rel="noreferrer">Visitar</a>
+                                <button class="btn btn-danger"> Danger</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+
+
+    }

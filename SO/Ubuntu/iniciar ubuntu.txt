@@ -1,0 +1,393 @@
+**************************************************************************************************************
+-------------------------------------------------------------------------------------------------------------
+SHARE FILES, NUEVA PRACTICA----------------------------------------------------------------------------------
+
+de windows a linux. se supone que se debe tener un usuario local en windows que coincida con el usuario
+linux, y que debe tener las credenciales de acceso a la carpeta
+
+	* primero de deben cargar las actualizaciones y upgrades en linux
+	* editar el archivo: sudo nano /etc/fstab, poner al final
+		//ip_equipo windows/carpeta_compartida	{tabulador} /ubicacion_en_linux {tabulador} cifs username=usuario,password=password
+	* sudo mount -a 
+	* al parecer tambien se monta la unidad con: sudo mount -t cifs //ip/carpeta_comp
+
+	por si faltas las librerias cifs o sale algun error
+	* sudo apt-get install cifs-utils
+
+	???checar que haya permisos en la carpeta windows paea usuario linux, y los permisos necesarios en
+	la carpeta linux
+
+	para desmontar 
+	sudo unmount /media/carpeta_montada
+	
+	igual, se podria intentar borrar la linea del fstab
+
+
+
+de linux a windows
+********la configuracion como se explica en los tutoriales solo ha funcionado con UBUNTU*********************
+
+
+considerar que samba y unix model son cosas distintas, asi que aunque haya un usuario unix,
+pero si no tiene una contraseña samba, no se comportara como deseamos. inicialmente, el modelo
+samba esta pensado en un usuario unico que comparte cosas en la red, y que no necesariamente
+tiene acceso al sistema local.
+
+	#usuario samba que no tiene acceso local
+	useradd -a /bin/false usuario
+
+configuracion de un invitado, sin contraseña
+	sudo apt-get install update
+	sudp apt*get installa upgrade
+
+	sudo mkdir publica /home/usuario/Escritorio/publica
+	#dar todos los permisos
+
+	#en smb.conf, share definitions
+	[publica]
+	path=/home/usuario/Escritorio/publica
+	browseable=yes
+	read only=no
+	guest ok=yes
+	valid users=nobody
+	public=yes
+
+	#configurar la interfaz de red como adaptador puente, ver ip
+	#verificar en windows 
+	
+POR PRACTICIDAD, LAS CARPETAS SE DEBEN CREAR EN EL AMBITO DE HOME, YA QUE LAS ESTRUCTURAS SUPERIORES
+CARGAN CON UNA SERIE DE PERMISOS POR DEFAULT QUE PUEDEN DISTORCIONAR EL COMPORTAMIENTO.	
+
+	**no hizo diferencia, sigue sin abrir directo en kali
+
+configuracion de compartida mediante grupo de usuario. la ventaja es que cada usuario cuenta con sus
+credenciales locales y la comparticion es transparente, pues unicamente se agrega al grupo que tiene
+todos los derechos sobre la carpeta
+
+	se crea el usuario y el grupo
+	(sudo useradd -M -d /ruta/compartido_xxx -s /usr/usbin/nologuin -G sambashare (*el grupo default de samba) adminsamba(*el nombre del usuario para samba))
+
+	se agrega el usuario al grupo
+	se le cambia el dueño a la carpeta por en nuevo grupo
+
+	*****************
+	SE AGREGA UNA smbpassword PARA ESE USUARIO. EN REALIDAD ESTA SERA LA FORMA DE DIFERENCIAR EL ACCESO
+	DESDE WINDOWS
+
+	se cambia el smb.conf, se quitan los valores para un usuario invitado y se agregan los permisos
+	para el grupo
+
+	valid users=@grupoX usuarioX
+
+	***
+	la española habilito otro adaptador de red en el vbox, este con adaptador solo-anfitrion
+
+
+	-----------------------------------------------------------------------------------------------------
+	#mi propio metodo
+	segui los pasos de la española
+
+	>   agregar usuario, darle no login
+	>   se pone contraseña a cada usuario en smbpasswd
+	>   a la carpeta le di todos los permisos al usuario y grupo que debe, para que si se autentica con otras
+		credenciales no se muestre nada
+	>   en smb.conf le quite browseable para que pida credeciales al escribir la ruta y solo se muestre para
+		el usuario correcto
+	>   valid users solo usuario y grupo correcto
+
+	??
+	>   todo va en una carpeta root, para que windows no saque el error de que ya esta conectado un usuario.
+		NO FUNCIONA, ya que al entrar al raiz, no vuelve a  pedir las credenciales, por lo tanto no deja
+		ver nada. funciona mejor en carpetas sueltas, se supone que el usuario no va a andarse metiendo
+		de carpeta en carpeta. esta el comando windows net use * /delete
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+iniciar ubuntu
+
+
+
+
+actualizar
+
+sudo apt update
+sudo apt upgrade
+
+ir a idiomas y complementar el idioma deseado
+
+otros complementos como las fuentes
+sudo apt install ubuntu-restricted-extras
+
+sudo apt install samba
+
+
+smb://192.168.xxx.xxx
+
+
+
+
+
+
+
+
+
+
+
+
+***********
+
+en consola si son archivos tipo ejecutables hay que darles 
+	sudo chmod 777 nombre.run o xxx.sh
+	sudo ./nombre
+esto para que se puedan ejecutar.
+para no escribir todo el nombre, se ponen las primeras letras y tabulador
+
+
+instalacion de programas .deb descargados
+	sudo dpkg -i nombre
+
+cuando se conoce el nombre del paquete
+	sudo apt install vlc
+
+***********
+
+
+******* SAMBA KALI LINUX *************************************
+habilitar samba es facil
+
+se instala
+	sudo apt-get install samba
+
+se borra el archivo smb.conf que viene por defecto
+	sudo rm -rf smb.conf
+se crea uno nuevo
+	sudo touch smb.conf
+	cat smb.conf
+se entra a edicion. checar si entra en modo solo lectura. OTRA OPCION ES
+ENTRAR CON GEDIT O MODO VISUAL DESDE LA CARPETA
+	vim smb.conf
+
+ya dentro se pone :
+
+	#############################################################################################
+	[slashrootdotin]
+
+	path =la ruta completa, por ejemplo /home/adan/documentos/carpeta_compartida
+	browseable=yes
+	read only=no
+
+	#*****OJO CON ESTE CODIGO, ES PARA PONER LOS USUARIOS VALIDOS, O LOS GRUPOS***************
+	valid users = usuario @grupo1 @grupo2
+	
+	ojo con los tipos de archivos permitidos
+	veto files = /*.mp3/*.wmv/*.wma/*.mpg/*.3gp/*.mpeg/*.mkv/
+
+	equipos permitidos
+	allow hosts=ip1, ip2...
+
+creacion de un usuario invitado para compartir carpeta
+	...
+	only guest=yes
+	create mask=0777
+	directory mask=0777
+	public=yes
+
+	***notar que tambien de debe dar permisos (chmod a+w) en el ambito local a los usuarios que 
+	vayan a tener acceso, o cambiar al usuario a owner. aqui es donde entran las opciones locales
+	de permisos y las diferentes combinaciones
+
+
+desde fuera se ponen agrega la clave samba a la cuenta que vaya a tener acceso a la carpeta
+	sudo smbpasswd -a usuario_existente
+	pide password despues...
+
+	
+Para arrancar el servidor samba, usamos uno de de estos dos comandos:
+
+	# systemctl start smbd
+	# service smbd start
+
+Con cada modificación que realicemos en el fichero smb.conf habrá que reiniciar el servicio smbd para 
+que esa modificación entre en funcionamiento. usamos uno de de estos dos comandos:
+
+	# systemctl restart smbd
+	# service smbd restart
+
+	ver usuarios samba
+	sudo pdbedit -L
+
+	para eliminar usuario samba
+	sudo smbpasswd -x usuario
+
+	para eliminar usuarios del sistema
+	sudo userdel usuario
+
+Para parar el servidor samba usamos uno de de estos dos comandos:
+
+	# systemctl stop smbd
+	# service smbd stop
+
+
+	***por si acasi, liberar el firewall
+	sudo ufw allow samba
+
+
+	se agrega el adaptadpor2 y se pone adaptador solo anfitrion en la maquina virtual
+	de virtualbox
+
+	****puertos que utiliza samba
+	
+	netbios-ns  137 TCP y 137 UDP
+	netbios-dgm 138 TCP y 138 UDP
+	netbios-ssn 139 TCP y 139 UDP
+
+
+
+**CON ESTO SE HA HA HABILITADO LA CONFIGURACION BASICA DEL HOST, FALTA
+LA ASIGNACION DE PERMISOS ESPECIFICOS PARA LOS RECURSOS***************
+
+reiniciar servicio , para actualizar cada vez que se hace un cambio en .conf
+	sudo /etc/init.d/smbd restart
+
+
+***********RECURSO ESPECIFICO************************
+en smb.conf agregar para el recurso
+
+[nombre]
+comment=xxx
+path=/xxx...
+public=yes
+writable=yes
+
+
+**********PERMISOS*******************************************************************************
+PARA  UN USUARIO CREADO PARA SAMBA, CON LA IDEA DE QUE ACCESE O COMPARTA RECURSOS Y NO QUE 
+INICIE SESION LOCAL EN EL SERVIDOR, SE PUEDE LOGRAR CON EL COMANDO. ????? EN DUDA ESTA ASEVERACION
+	
+	useradd ...-s /usr/sbin/nologuin 
+
+	PARA CAMBIARLE A UNO EXISTENTE
+
+	sudo chsh -s /bin/false usuario
+
+CUANDO SE IMPLEMENTA SEGURIDAD PARA EL PROPIO ENTORNO, EXISTE CIERTA DUDA CUANDO SE UTILIZA LA
+CONSOLA Y SE AUTENTICA CON EL COMANDO "su". PERO SI SE INICIA SESION LA LOGICA DE PERMISOS 
+FUNCIONA T CUAL.
+
+AL PARECER LOS MODELOS LOCALES NO SE FUSIONAN CON EL MODELO DE PRIVILEGIOS DE SAMBA, PARA ESTE 
+ULTIMO SE UTILIZA SAMBA.CONF PARA CONFIGURAR LA SEGURIDAD
+
+*************************************************************************************************
+
+elimina grupo
+	groupdel grupo
+
+ver todos los grupos
+	cat /etc/group
+
+agrega grupos 
+	sudo groupadd obras
+
+cambiar de grupo a elementos, otro comando para cambiar propietario y grupo
+	chgrp elemento agrupo
+
+	sudo chown <usuario> (archivo o carpeta)
+	sudo chgrp <grupo> <carpeta> (archivo o carpeta)
+	
+	chown propietario:grupo objeto
+
+agregar usuario
+	sudo adduser manuel
+	sudo adduser -m manuel ??
+	***este comando agrega usuario, grupo y directorios personales
+	tipo los perfiles de windows
+
+agregar usuario a grupo
+	sudo adduser manuel obras
+	
+	usermod -g grupo usuario
+
+eliminar usuario y su informacion de perfil
+	userdel -r usuario
+
+ver usuarios
+	cat etc/passwd
+
+
+chmod u+w archivo : se le esta agregando w al usuario
+chmod g+w archivo :  se le esta asignando w al grupo
+chmod o+x archivo : se le esta asignando x a otros (o de other)
+
+*a es pera all, o sea todos
+
+tambien funciona
+chmod o-rx /tmp/midirectorio #quita r o x a otros
+
+chmod -R o-rx /tmp/midirectorio  # -R para actuar sobre la carpeta y su contenido
+
+
+
+
+
+Passw0rd2021
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

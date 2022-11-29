@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Teconologías de la Información</h2>
+
+    <h3>Prácticas básicas de Linux (Ubuntu)</h3>
+    <h4>Compartir recursos Windows - Linux</h4>
+
+    <h4>Antecedentes</h4>
+    <p>Linux, en todas sus distribuciones, es un sistema operativo de probada solidez, sobre todo en el ámbito de servidores
+        y sistemas empresariales. Tiene casi todas las ventajas, es seguro, tiene bonitas interfaces, pero sobre todo es gratis.
+        La pregunta es: entonces por qué es tan poco utilizado por usuarios finales? Una de las principales razones es porque
+        funciona distinto. Como es gratis, la comunidad que lo desarrolla va mas lentamente que lo que lo hacen las empresas, motivadas
+        por la ganancia económica, asi que muchas cosas que hacemos cotidianamente en Windows se hacen de manera diferente en Linux,
+        aunque eso no quiera decir necesariamente que de manera mas difícil.<br><br>
+
+        Por otro lado, como usuarios no solemos utilizar herramientas adecuadas para administrar nuestros recursos y estamos expuestos
+        a virus y malware de todo tipo. En este contexto es frecuente que haya pérdida de datos por falta de politicas seguras, en general, sub utilizamos
+        nuestras redes, nuestros equipos y nuestros recursos por falta de conocimiento.<br><br>
+
+        El presente taller tiene como objetivo acercar de manera facil a Linux y al usuario novato, mostrarle que con solo familiarizarse
+        con algunas lineas de codigo pordemos configurar sus principales funciones y aprovechar sus magníficas herramientas.<br><br>
+    </p>
+    
+
+
+    <h4>Compartir recursos en una LAN familiar.</h4>
+    Supongamos que en una familia típica de 4 personas, ambos padres con dos hijos. Los padres deben tener un directorio donde almacenen sus
+    documentos y solo ellos podran entrar. Los hijos deben tener su propio almacen, pero los padres podran tener acceso de sólo lectura. Y 
+    Finalmente un directorio donde puedan entrar todos, incluyendo uduarios invitados. <br><br>
+    
+    Una de las formas de implementar este coontexto es a través del modelo de usuarios y grupos de linux, de esta manera habría un grupo
+    de padres, estudiantes e invitados. Cada usuario tendría su respectiva credencial en samba, así como sus niveles de privilegios en el propio
+    que sistema, que serán los que apliquen a la hora de accesar a los recuesos a través de la red.<br><br>
+
+    Antes que nada abrimos una terminal con:<br><br>
+
+        Control + Alt + T<br><br>
+
+    El primer paso es actualizar el sistema, esto se logra abriendo una terminal y corriendo los siguientes comandos:<br><br>
+
+        sudo apt update<br><br>
+
+        sudo apt upgrade<br><br>
+
+    Normalmente hay que instalar el net-tools que vamos a necesitar mas adelante, asi que corremos el comando:<br>
+
+        sudo apt-get install net-tools<br><br>
+
+    Por ultimo instalamos al actor ptincipal, Samba:<br><br>
+
+        sudo apt-get install Samba<br><br>
+
+    Aquí vale la pena hacer un paréntesis. Por sí mismos, Windows y Linux no son compatibles entre sí. Samba es una implementación de Linux
+    para utilizar el protocolo de comparticion de recursos de Windows, con Samba instalado, ambos sistemas operativos podra visualizarse
+    en una red y podrán compartir recursos como archivos, carpetas e impresoras. De esta forma, Samba junto con el sistema nativo de autenticacion
+    de linux nos darán las herramientas necesarias para compartir recursos de manera diferenciada.
+
+    </p>
+</body>
+</html>

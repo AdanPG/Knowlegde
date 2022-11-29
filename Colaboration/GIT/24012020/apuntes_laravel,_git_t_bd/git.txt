@@ -1,0 +1,135 @@
+SUBIR PROYECTO NUEVO A GIT -como propietario
+mi repositorio personal gitlab: adan.j.perez.galicia@gmail.com
+
+
+ssh-keygen para generar una clave ssh (cuidado por si en el repositorio ya esta registrada
+no sera necesario crearla de nuevo)
+
+	se le pone algun nombre al archivo a generar XXX
+cat XXX.pub
+
+se busca el archivo .pub pero en la cuenta del usuario
+en .ssh, se accesa con
+	ls -a para que muestre la carpeta ssh
+
+ 	cat id_rsa.pub
+
+se copia la clave y se pega en la pagina de git lab en el panel izquierdo donde esta
+ssh keys
+
+luego se siguen todos los pasos que se indican (Push an existing folder), desde git init hasta el push
+
+
+**si se pierde el control de los proyectos en la maquina de desarrollo, lo mejor sera eliminar el repositorio
+y crearlo de nuevo, como con recipes, ya solo ejecute los comandos porque la clave ssh ya estaba creada
+
+
+
+***********************************************************************
+***********************************************************************
+
+
+
+entrar al bash, dentro de la carpeta del proyecto ejecutar:
+	git init
+	crea una carpeta de configuracion
+
+git status: muestra los archivos que estan en seguimiento
+
+git add nombre_archivo: agrega el archivo al seguimiento de git
+
+	git add . : agrega todos los archivos
+
+git commit: genera una snapshot inicial. la primera vez se debe configurar
+los datos generales. 
+se entiende que una vez que se hacen cambios se realiza un commit para generar 
+el snapshot, al cual se identifica con un mensaje descriptivo.
+
+	git config --global user.email ""
+	git config --global user.name ""
+
+	abre un editor de codigo para crear un mensaje de identificacion
+
+	para evitar que abra el editor de codigo
+
+	git commit -m "descripcion del commit"
+
+git checkout -- nombre_archivo: desecha los cambios detectados en el archivo
+al checar con git status
+
+git diff nombre_archivo: muestra las modificaciones realizadas en el arhchivo
+
+git log: muestra los detalles de los commit
+
+.gitignore: es  un archivo al cual se le van agregando los nombres de los archivos
+o carpetas que se desea que git ignore, que no los agregue al entorno de trabajo
+
+git branch nombre_proyecto: crea una copia del proyecto
+
+git checkout nombre_proyecto: se cambia al nuevo proyecto como actual de 
+trabajo
+
+****EN ESTE PUNTO SE REQUIERE CREAR UNA CUENTA EN GITHUB, EL CUAL ES EL 
+REPOSITORIO PARA SUBIR LOS PROYECTOS*****
+
+
+primero se crea un repositorio publico en github
+
+al crear el nuevo repositorio nos da una serie de pasos que serian los necesarios
+para comenzar a trabajar con un nuevo proyecto, desde init, commit y los comandos
+para subir el proyecto
+
+se ejecutan los dos comando finales dentro del bash para subir las actualizaciones
+en el proyecto
+
+git remote add origin https://github.com/mako72/prueba1.git
+git push -u origin master
+---------------------------------------------------
+
+
+********CONECTARSE A UN PROYECTO EXISTENTE***************************
+*********************************************************************
+VIDEO https://www.youtube.com/watch?v=et2X_XBqL6Q
+-copiar de la pagina la ruta https
+-git clone + la ruta
+
+si sale error de vendor
+-composer install
+
+-configurar el .env
+
+-correr los seders
+
+si sale error cifrado ...algo asi
+
+correr 
+- php artisan key:generate
+
+
+
+
+git clone url: VINCULA el proyecto del repositorio github en el directorio de
+trabajo. tambien se puede bajar el rar y descomprimirlo
+
+se entiende que, una vez vinculado el proyecto, cada vez que se quieren mandar cambios
+al repositorio, se hara un commit y un push.
+
+
+*********MANDAR ACTUALIZACIONES al proyecto***********
+******************************************************
+
+git all -A
+git commit -m "algo"
+git pull origin master
+git push origin master
+
+
+
+
+****COMANDOS UTILES
+********************
+
+
+para recargar las clases del proyecto en la nube (pg en la maquina local no corre --sed y en las demas si)
+
+desde el proyecto ejecutar: composer dump-autoload

@@ -1,0 +1,2 @@
+para publicar net core en iis hay que instalar el nt core runtime
+a diciembre de 2020 esta la version 3.2

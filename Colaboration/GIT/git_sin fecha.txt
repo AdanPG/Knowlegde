@@ -1,0 +1,252 @@
+SUBIR PROYECTO NUEVO A GIT -como propietario
+mi repositorio personal gitlab: adan.j.perez.galicia@gmail.com
+
+instalar gitbash para el so
+
+primero se genera (si es que nose ha generado antes) una llave que identifica al usuario actual de la
+cuenta de la pc ante la cuenta gitlab
+
+ssh-keygen
+
+con esto se genera un arhivo con la cadena o key, ubicado en el raiz de la cuenta de usuario local 
+del so, busca la cadena en el archivo .pub que se creo, por default id_rsa.pub. el archivo que
+comienza con : ssh-rsa ...
+
+se entiende que cada maqina que se conecta al repositorio debe tener una llave para su usuario local ***
+
+
+	c:\usuarios\xxx ->buscar el archivo  xxx.pub
+
+	..............................................
+	utilizando la consola de git, la sintaxis es de comandos de linux
+
+	en .ssh, se accesa con
+	ls -a para que muestre la carpeta ssh
+ 	cat id_rsa.pub
+	..............................................
+
+se copia la clave y se pega en la pagina de git lab en el panel izquierdo donde esta
+ssh keys, se le da add key
+
+se comprueba el exito de las keys con
+	ssh -T git@gitlab.com
+
+
+**********cuidadi si se trata de subir carpetas existentes, en su caso se debe eliminar al .git anterior para que no cree
+error.
+
+	git init --initial-branch=main
+	
+	git config --global user.name adapng
+	git config --global user.email adan.j.perez.galicia@gmail.com
+
+y comprobar con
+	git config --list
+	
+	git remote add origin git@gitlab.com:adanpg/know.git
+	git add .
+	git commit -m "Initial commit"
+	git push -u origin main
+
+
+	
+
+
+
+
+
+luego se siguen todos los pasos que se indican (Push an existing folder), desde git init hasta el push, son los comando de 
+arriba.
+
+
+**si se pierde el control de los proyectos en la maquina de desarrollo, lo mejor sera eliminar el repositorio
+y crearlo de nuevo, como con recipes, ya solo ejecute los comandos porque la clave ssh ya estaba creada
+
+**si hay alguna discordancia con el nombre de la cuenta local del so, dara error se permisos cuando se intente 
+subir el proyecto. cuidado con haber ambiado el nombre de la cuenta, o cualquier modificacion.
+
+
+
+
+
+********CONECTARSE A UN PROYECTO EXISTENTE***************************
+*********************************************************************
+VIDEO https://www.youtube.com/watch?v=et2X_XBqL6Q
+
+-se crea la clave para el usuario local (en caso de que no exista) y se copia en la pagina para que genere la 
+entrada ssh
+
+-copiar de la pagina la ruta https
+-git clone + la ruta de la pagina
+
+si sale error de vendor
+-composer install
+
+
+	-----------------------------------------------------
+	---en caso de proyectos e implementacion laravel
+
+	-configurar el .env
+
+	-correr los seders
+
+	si sale error cifrado ...algo asi
+
+	correr 
+	- php artisan key:generate
+	------------------------------------------------------
+
+
+
+git clone url: VINCULA el proyecto del repositorio github en el directorio de
+trabajo. tambien se puede bajar el rar y descomprimirlo
+
+se entiende que, una vez vinculado el proyecto, cada vez que se quieren mandar cambios
+al repositorio, se hara un commit y un push.
+
+
+*********MANDAR ACTUALIZACIONES al proyecto***********
+******************************************************
+
+git add -A
+git commit -m "algo"
+git pull origin master
+git push origin master
+
+
+
+
+***********************************************************************
+***********************************************************************
+COMANDOS MAS UTILIZADOS
+
+
+para recargar las clases del proyecto en la nube (pg en la maquina local no corre --sed y en las demas si)
+
+desde el proyecto ejecutar: composer dump-autoload
+
+
+entrar al bash, dentro de la carpeta del proyecto ejecutar:
+	git init
+	crea una carpeta de configuracion
+
+git status: muestra los archivos que estan en seguimiento
+
+git add nombre_archivo: agrega el archivo al seguimiento de git
+
+	git add . : agrega todos los archivos
+
+git commit: genera una snapshot inicial. la primera vez se debe configurar
+los datos generales. 
+se entiende que una vez que se hacen cambios se realiza un commit para generar 
+el snapshot, al cual se identifica con un mensaje descriptivo.
+
+	git config --global user.email ""
+	git config --global user.name ""
+
+	abre un editor de codigo para crear un mensaje de identificacion
+
+	para evitar que abra el editor de codigo
+
+	git commit -m "descripcion del commit"
+
+git checkout -- nombre_archivo: desecha los cambios detectados en el archivo
+al checar con git status
+
+git diff nombre_archivo: muestra las modificaciones realizadas en el arhchivo
+
+git log: muestra los detalles de los commit
+
+.gitignore: es  un archivo al cual se le van agregando los nombres de los archivos
+o carpetas que se desea que git ignore, que no los agregue al entorno de trabajo
+
+git branch nombre_proyecto: crea una copia del proyecto
+
+git checkout nombre_proyecto: se cambia al nuevo proyecto como actual de 
+trabajo
+
+
+
+****EN ESTE PUNTO SE REQUIERE CREAR UNA CUENTA EN GITLAB, EL CUAL ES EL 
+REPOSITORIO PARA SUBIR LOS PROYECTOS*****
+
+
+primero se crea un repositorio publico en gitlab
+
+al crear el nuevo repositorio nos da una serie de pasos que serian los necesarios
+para comenzar a trabajar con un nuevo proyecto, desde init, commit y los comandos
+para subir el proyecto
+
+se ejecutan los dos comando finales dentro del bash para subir las actualizaciones
+en el proyecto
+
+git remote add origin https://github.com/mako72/prueba1.git
+git push -u origin master
+---------------------------------------------------
+
+
+
+**************************************************************************************
+*********************************************RAMAS Y FUSIONES*************************
+
+las ramas son una especie de lineas de tiempo, cuando git toma el control del proyecto 
+mediante git init, tendremos la posibilidad de implementar ramas para hacer pruebas en
+el proyecto sin que se ponga en riesgo el principal. tambien podremos dirigirnos a un
+edtado especifico mediante el git loout y la clave del commit. cuando ya se hicieron las
+pruebas suficientes se puede fusionar la rama de prueba en la principal.
+
+
+
+
+	git chekout 		se muestran las ramas existentes
+	git chekout rama	se pasa a la rama deseada
+	git log			se muestran los commits existentes
+				aqui se puede ver la clave del commit, y esta clave se
+				utiliza cuando se desea ir a ese punto especifico, aplicando
+				el commando git checkout clave
+	git branch rama		se crea una rama nueva
+	git merge rama		une a la rama actual la rama que se esta invocando, asi que 
+				primero se debe uno mover a la rama a la cual se desea agregar
+				otra rama de prueba.
+	git branch -d rama	elimina la rama. usando -D se elimina a pesar de que tenga cambios
+				pendientes de commit
+
+	git reset --hard clave_commit	hay ocasiones en que se desea eliminar algun commit y los cambios
+					realizados. con este comando se elimina. CUIDADO
+					tambien existe git reset --soft, el cual elimina el commit pero sin modificar
+					el codigo
+
+	git help		para ver la referencia de los comandos
+
+
+
+
+
+
+
+	vide de apoyo
+	https://www.youtube.com/watch?v=vH9pkFf1D7M
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
